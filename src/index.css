@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #5216ff;
+  --color-primary-dark: #3f0be0;
+  --color-accent-purple: #7c3aed;
+  --color-accent-pink: #db2777;
+  --color-bg-light: #f3f3f3;
+  --color-bg-white: #ffffff;
+}
+
+@layer base {
+  body {
+    @apply bg-bg-light text-slate-900 font-sans;
+  }
+}
+
+.glass {
+  @apply bg-white/70 backdrop-blur-md border border-white/20;
+}
+
+.btn-primary {
+  @apply bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-2xl transition-all duration-200 active:scale-95 flex items-center justify-center gap-2;
+}
+
+.card {
+  @apply bg-white rounded-3xl p-6 shadow-sm border border-slate-100;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
