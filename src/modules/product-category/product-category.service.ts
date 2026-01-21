@@ -34,7 +34,7 @@ export class ProductCategoryService extends BaseTenantService {
     async createCategory(categoryData: Partial<Category>) {
         const manager = await this.getEntityManager();
 
-        // Extract productGroup ID if provided as an object
+        // Extract productGroup ID if provided as an object..
         const data: any = { ...categoryData };
         // Extract productGroup ID if provided as an object or string
         if (data.productGroup) {
