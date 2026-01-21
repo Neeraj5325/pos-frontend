@@ -15,7 +15,7 @@ export class ProductGroup {
     @Column({ type: 'text', nullable: true })
     description: string;
 
-    @OneToMany(() => Category, (category) => category.productGroup)
+    @OneToMany(() => Category, (category) => category.productGroup, { cascade: true })
     categories: Category[];
 
     @CreateDateColumn()

@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { ProductGroupsService } from './product-groups.service';
 import { ProductGroup } from './product-group.entity';
 
 @Controller('product-groups')
+@UseGuards(AuthGuard('jwt'))
 export class ProductGroupsController {
     constructor(private readonly productGroupsService: ProductGroupsService) { }
 

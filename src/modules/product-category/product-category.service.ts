@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { BaseTenantService } from '../../common/base-tenant.service';
 import { Category } from './category.entity';
+import { ProductGroup } from '../product-group/product-group.entity';
 
 @Injectable()
 export class ProductCategoryService extends BaseTenantService {
@@ -35,13 +36,29 @@ export class ProductCategoryService extends BaseTenantService {
 
         // Extract productGroup ID if provided as an object
         const data: any = { ...categoryData };
-        if (data.productGroup && typeof data.productGroup === 'object') {
-            data.productGroupId = data.productGroup.id;
+        // Extract productGroup ID if provided as an object or string
+        if (data.productGroup) {
+            if (typeof data.productGroup === 'object') {
+                data.productGroupId = data.productGroup.id;
+            } else if (typeof data.productGroup === 'string') {
+                data.productGroupId = data.productGroup;
+            }
             delete data.productGroup;
         }
 
+        if (data.productGroupId) {
+            const group = await manager.findOne(ProductGroup, { where: { id: data.productGroupId } });
+            if (!group) {
+                throw new BadRequestException(`Product Group with ID ${data.productGroupId} does not exist.`);
+            }
+        }
         const item = manager.create(Category, data);
-        return manager.save(Category, item);
+        try {
+            return await manager.save(Category, item);
+        } catch (error) {
+            console.error('Error saving category:', error);
+            throw new BadRequestException(`Failed to save category. Error: ${error.message}. Data: ${JSON.stringify(data)}`);
+        }
     }
 
     async updateCategory(id: string, itemData: Partial<Category>) {
@@ -49,9 +66,21 @@ export class ProductCategoryService extends BaseTenantService {
 
         // Extract category ID if provided as an object
         const data: any = { ...itemData };
-        if (data.category && typeof data.category === 'object') {
-            data.categoryId = data.category.id;
-            delete data.category;
+        // Extract productGroup ID if provided as an object or string
+        if (data.productGroup) {
+            if (typeof data.productGroup === 'object') {
+                data.productGroupId = data.productGroup.id;
+            } else if (typeof data.productGroup === 'string') {
+                data.productGroupId = data.productGroup;
+            }
+            delete data.productGroup;
+        }
+
+        if (data.productGroupId) {
+            const group = await manager.findOne(ProductGroup, { where: { id: data.productGroupId } });
+            if (!group) {
+                throw new BadRequestException(`Product Group with ID ${data.productGroupId} does not exist.`);
+            }
         }
 
         await manager.update(Category, id, data);

@@ -28,11 +28,7 @@ export class Category {
     @Column({ type: 'date', nullable: true })
     wef: Date;
 
-    @Column({ nullable: true })
-    productGroupId: string;
-
-    @ManyToOne(() => ProductGroup, (group) => group.categories)
-    @JoinColumn({ name: 'productGroupId' })
+    @ManyToOne(() => ProductGroup, (group) => group.categories, { onDelete: 'CASCADE' })
     productGroup: ProductGroup;
 
     @OneToMany(() => Item, (item) => item.category)
